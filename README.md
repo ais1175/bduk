@@ -82,6 +82,12 @@ You can customize the default or create new ones entirely.
 More on theming and advanced configuration:  
 [docs.boii.dev](https://docs.boii.dev)
 
+## Notes
+
+- This is currently an alpha build, it will change slightly and things maybe added or even removed if deemed useless, please be aware of this. 
+- A full 1.0 release **will** be happening, the internal plan is to use this for creating BOII scripts so it will be officially supported for a considerable amount of time.
+- JavaScript is not my best language to work with but im learning. There will be places it could be improved for sure, so if you spot anything that could be cleaner or more efficient, feel free to point it out.
+
 ## Support
 
 Need help? Found a bug? Need to vent about a bug that isn’t from this kit? Support is available through the BOII Development [Discord](https://discord.gg/MUckUyS5Kq).
