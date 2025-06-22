@@ -42,9 +42,6 @@ files {
     "**"
 }
 
---- OxMySQL
-server_script "@oxmysql/lib/MySQL.lua"
-
 --- Init
 shared_script "init.lua"
 
