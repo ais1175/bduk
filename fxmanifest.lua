@@ -18,7 +18,7 @@
 #                           #                       
 #############################                                         
 #           BDUK            #
-#          V0.1.1           #    
+#          V0.1.2           #    
 #############################
 ]]
 
@@ -26,7 +26,7 @@ fx_version "cerulean"
 games { "gta5", "rdr3" }
 
 name "bduk"
-version "0.1.1"
+version "0.1.2"
 description "BOII Development UI Kit."
 author "boiidevelopment"
 repository "https://github.com/boiidevelopment/bduk"
