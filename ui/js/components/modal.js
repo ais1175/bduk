@@ -62,9 +62,8 @@ export class Modal {
     /**
      * Appends the modal to DOM and binds events.
      * @param {string} [container="#ui_focus"]
-     * @param {function} [on_button_click]
      */
-    append_to(container = "#ui_focus", on_button_click = null) {
+    append_to(container = "#ui_focus") {
         $(container).html(this.get_html()).addClass("active");
 
         $(".modal_select").off("click").on("click", function () {
