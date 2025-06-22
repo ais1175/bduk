@@ -35,13 +35,13 @@ end
 --- Calls a registered function by its label.
 --- @param label string: The key associated with the function.
 --- @return The result of the function, or false if not found.
-function bduk.call_registered_function(label)
+function bduk.call_registered_function(label, data)
     if not label then bduk.log("error", "function label is required") return false end
 
     local func = bduk.registered_functions[label]
     if not func then bduk.log("error", ("function with label %s not found"):format(label)) return false end
 
-    return bduk.registered_functions[label]()
+    return bduk.registered_functions[label](data)
 end
 
 --- Recursively sanitizes a UI config by replacing functions with labels and storing them
@@ -75,7 +75,7 @@ function bduk.build_ui(config)
     return bduk.sanitize_ui(config, "ui")
 end
 
---- Copied from BDUL debugging functions to keep BDUK standalone.
+--- Copied from BDTK debugging functions to keep BDUK standalone.
 --- Returns the current timestamp as a formatted string.
 --- @return string: Formatted time (YYYY-MM-DD HH:MM:SS)
 function bduk.get_current_time()
@@ -87,7 +87,7 @@ function bduk.get_current_time()
     return "0000-00-00 00:00:00"
 end
 
---- Copied from BDUL debugging functions to keep BDUK standalone.
+--- Copied from BDTK debugging functions to keep BDUK standalone.
 --- Prints a formatted debug message to the console.
 --- @param level string: One of "debug", "info", "success", "warn", "error", "critical", "dev".
 --- @param message string: Pre-formatted message to display.
@@ -97,5 +97,5 @@ function bduk.log(level, message)
     local clr = bduk.debug_colours[level] or "^7"
     local time = bduk.get_current_time()
 
-    print(("%s[%s] [bdtk] [%s]:^7 %s"):format(clr, time, level:upper(), message))
+    print(("%s[%s] [BDUK] [%s]:^7 %s"):format(clr, time, level:upper(), message))
 end
