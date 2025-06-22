@@ -108,8 +108,8 @@ else
             if cb then cb(false) end
             return
         end
-
-        local success, result = pcall(bduk.call_registered_function, data.action)
+        
+        local success, result = pcall(bduk.call_registered_function, data.action, data)
 
         if not success then
             bduk.log("error", ("NUI handler: Function call failed - %s"):format(result))
