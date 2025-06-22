@@ -143,6 +143,10 @@ export class Builder {
 
     /** Destroys the current UI */
     destroy() {
+        if (this.tooltip && $("#tooltip").is(":visible")) {
+            this.tooltip.hide();
+        }
+        
         this.main_container.empty();
         this.header = null;
         this.footer = null;
