@@ -9,6 +9,7 @@
 
 import { Buttons } from "/ui/js/components/buttons.js"
 import { Namecard } from "/ui/js/components/namecard.js"
+import { send_nui_callback } from "/ui/js/utils.js";
 
 /**
  * @class Footer
@@ -37,19 +38,16 @@ export class Footer {
     build_element(elem) {
         const { type } = elem;
         if (type === "text") return `<div class="footer_text">${elem.text}</div>`;
-        if (type === "action") return `
-            <div class="footer_action ${elem.class || ""}" ${elem.id ? `id="${elem.id}"` : ""} data-action="${elem.key}">
-                <span class="footer_key">${elem.key}</span><span class="footer_label">${elem.label}</span>
-            </div>`.trim();
         if (type === "actions") {
-            const actions = Array.isArray(elem.actions) ? elem.actions : Object.values(elem.actions || {});
+            const actions = Array.isArray(elem.actions) ? elem.actions : [elem];
             return `
-            <div class="footer_actions_group">
-                ${actions.map(a => `
-                    <div class="footer_action ${a.class || ""}" ${a.id ? `id="${a.id}"` : ""} data-action="${a.key}">
-                        <span class="footer_key">${a.key}</span><span class="footer_label">${a.label}</span>
-                    </div>`).join("")}
-            </div>`.trim();
+                <div class="footer_actions_group">
+                    ${actions.map(a => `
+                        <div class="footer_action ${a.class || ""}" ${a.id ? `id="${a.id}"` : ""} data-action="${a.action}" data-key="${a.key}">
+                            <span class="footer_key">${a.key}</span><span class="footer_label">${a.label}</span>
+                        </div>`).join("")}
+                </div>
+            `.trim();
         }
         if (type === "buttons") {
             const buttons = Array.isArray(elem.buttons) ? elem.buttons : Object.values(elem.buttons || {});
@@ -76,19 +74,41 @@ export class Footer {
             </div>`.trim();
     }
 
-    /** @param {string} [container="#ui_main"] Appends footer HTML and binds events */
+    /** @param {string} [container="#ui_main"] Appends footer HTML */
     append_to(container = "#ui_main") {
         $(container).append(this.get_html());
+        this.bind_events();
+    }
 
-        $(".footer_action").off("click").on("click", e => {
-            const key = $(e.currentTarget).data("action");
-            if (this.on_action) this.on_action(key);
-        });
-
+    /** Binds events to footer */
+    bind_events() {
         $(".footer_button_group .btn").off("click").on("click", e => {
             const id = $(e.currentTarget).data("button");
             const action = $(e.currentTarget).data("action");
-            if (this.on_button_click) this.on_button_click(id, action);
+            if (this.on_button_click) return this.on_button_click(id, action);
+            if (action) {
+                console.log("[Footer] Clicked footer button:", action);
+                send_nui_callback(action, { source: "footer_button", id });
+            }
+        });
+
+        $(document).off("keydown.footer").on("keydown.footer", e => {
+            const key = e.key.toUpperCase();
+            const $match = $(`.footer_action[data-key="${key}"]`);
+            if ($match.length) {
+                const action = $match.data("action");
+                if (action) {
+                    if (action === "close_builder" && window.bduk_instance) {
+                        window.bduk_instance.destroy();
+                        window.bduk_instance = null;
+                        return;
+                    }
+                    e.preventDefault();
+                    console.log("[Footer] Keypress triggered action:", action);
+                    send_nui_callback(action, { keypress: true });
+                }
+            }
         });
     }
+
 }
