@@ -31,25 +31,34 @@ export class Modal {
     /** @private @returns HTML for modal inputs  */
     get_input_html(opt) {
         const common = `id="${opt.id}" class="modal_input" placeholder="${opt.placeholder || ''}"`;
+        let dataset_attrs = "";
+
+        if (opt.dataset && typeof opt.dataset === "object") {
+            for (const [k, v] of Object.entries(opt.dataset)) {
+                dataset_attrs += ` data-${k.replace(/_/g, "-")}="${v}"`;
+            }
+        }
 
         if (opt.type === "select" && Array.isArray(opt.options)) {
-            const opts = opt.options.map(o => `<div class="custom_option" data-value="${o.value}">${o.label}</div>`).join("");
-            return `<div class="modal_field"><label for="${opt.id}">${opt.label || opt.id}</label><div class="modal_select_wrapper"><div class="modal_select" data-id="${opt.id}">${opt.options[0].label}</div><div class="modal_select_options">${opts}</div></div></div>`;
+            const opts = opt.options.map(o =>
+                `<div class="custom_option" data-value="${o.value}" data-source="${o.source || o.value}">${o.label}</div>`
+            ).join("");
+
+            return `<div class="modal_field">
+                <label for="${opt.id}">${opt.label || opt.id}</label>
+                <div class="modal_select_wrapper">
+                    <div class="modal_select" data-id="${opt.id}">Select a value...</div>
+                    <div class="modal_select_options">${opts}</div>
+                </div>
+            </div>`;
         }
 
         if (opt.type === "textarea") {
-            return `<div class="modal_field"><label for="${opt.id}">${opt.label || opt.id}</label><textarea ${common}></textarea></div>`;
+            return `<div class="modal_field"><label for="${opt.id}">${opt.label || opt.id}</label><textarea ${common}${dataset_attrs}></textarea></div>`;
         }
 
-        const attrs = [`type="${opt.type || 'text'}"`, common, opt.min !== undefined ? `min="${opt.min}"` : "", opt.max !== undefined ? `max="${opt.max}"` : ""].join(" ");
+        const attrs = [`type="${opt.type || 'text'}"`, common, dataset_attrs, opt.min !== undefined ? `min="${opt.min}"` : "", opt.max !== undefined ? `max="${opt.max}"` : ""].join(" ");
         return `<div class="modal_field"><label for="${opt.id}">${opt.label || opt.id}</label><input ${attrs.trim()} /></div>`;
-    }
-
-    /** @returns {string} Full HTML for the modal */
-    get_html() {
-        const inputs = this.options.map(opt => this.get_input_html(opt)).join("\n");
-        const buttons = new Buttons({ buttons: this.buttons, classes: "modal_button_group" }).get_html();
-        return `<div id="modal_container"><div class="modal ${this.classes}"><h2 class="modal_title">${this.title}</h2><div class="modal_inputs">${inputs}</div><div class="modal_actions">${buttons}</div></div></div>`.trim();
     }
 
     /** @returns {string} Full HTML for the modal */
@@ -73,8 +82,16 @@ export class Modal {
         });
 
         $(".modal_select_options .custom_option").off("click").on("click", function () {
-            const val = $(this).data("value"), label = $(this).text(), $w = $(this).closest(".modal_select_wrapper");
-            $w.find(".modal_select").text(label).data("value", val);
+            const val = $(this).data("value");
+            const source = $(this).data("source");
+            const label = $(this).text();
+            const $w = $(this).closest(".modal_select_wrapper");
+            const $sel = $w.find(".modal_select");
+
+            $sel.text(label)
+                .data("value", val).attr("data-value", val)
+                .data("source", source).attr("data-source", source);
+
             $w.find(".modal_select_options").hide();
         });
 
