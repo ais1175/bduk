@@ -21,11 +21,11 @@ export class Footer {
      * @param {Object} config.layout - Flex config for left, center, right.
      * @param {Object} config.elements - Footer elements for each section.
      * @param {Function} [config.on_action] - Callback when an action is clicked.
-     * @param {Function} [config.on_button_click] - Callback for button clicks.
+     * @param {Function} [config.on_button_action] - Callback for button clicks.
      */
-    constructor({ layout = {}, elements = {}, on_action = null, on_button_click = null }) {
+    constructor({ layout = {}, elements = {}, on_action = null, on_button_action = null }) {
         this.layout = layout; this.elements = elements;
-        this.on_action = on_action; this.on_button_click = on_button_click;
+        this.on_action = on_action; this.on_button_action = on_button_action;
     }
 
     /** @param {string} section @returns {string} CSS style string for section */
@@ -85,7 +85,7 @@ export class Footer {
         $(".footer_button_group .btn").off("click").on("click", e => {
             const id = $(e.currentTarget).data("button");
             const action = $(e.currentTarget).data("action");
-            if (this.on_button_click) return this.on_button_click(id, action);
+            if (this.on_button_action) return this.on_button_action(id, action);
             if (action) {
                 console.log("[Footer] Clicked footer button:", action);
                 send_nui_callback(action, { source: "footer_button", id });
