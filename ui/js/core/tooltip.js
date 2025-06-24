@@ -104,7 +104,7 @@ export class Tooltip {
 
             $(el).off("mouseenter mouseleave").on("mouseenter", () => {
                 this.set_content(data);
-                this.$el.data("tooltip_element", el); // correct: store DOM source
+                this.$el.data("tooltip_element", el);
                 this.attach_mousemove();
             }).on("mouseleave", () => {
                 this.hide();
@@ -144,7 +144,7 @@ export class Tooltip {
                 return;
             }
 
-            send_nui_callback(action.id, dataset, { should_close }).then(() => {
+            send_nui_callback(action.action, dataset, { should_close }).then(() => {
                 if (should_close && window.bduk_instance?.destroy) {
                     window.bduk_instance.destroy();
                     window.bduk_instance = null;
