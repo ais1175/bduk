@@ -46,7 +46,7 @@ $(document).ready(() => {
                     {
                         type: "buttons",
                         buttons: [
-                            { id: "save", label: "Save", action: "save_changes", class: "primary" },
+                            { id: "save", label: "Save", icon: "fa-solid fa-gear", action: "save_changes", class: "primary" },
                             { id: "exit", label: "Exit", action: "exit_builder", class: "secondary" }
                         ]
                     }
@@ -80,7 +80,7 @@ $(document).ready(() => {
                     {
                         type: "actions",
                         actions: [
-                            { key: "ESC", label: "Close" },
+                            { key: "ESCAPE", label: "Close" },
                             { key: "E", label: "Confirm" }
                         ]
                     }
@@ -349,7 +349,7 @@ $(document).ready(() => {
                     ]
                 }
             ],
-            on_click: (id, action) => {
+            on_action: (id, action) => {
                 console.log("Sidebar click:", id, action);
             }
         }
