@@ -146,7 +146,11 @@ export class Builder {
         if (this.tooltip && $("#tooltip").is(":visible")) {
             this.tooltip.hide();
         }
-        
+
+        if ($("#modal_container").length) {
+            $("#modal_container").remove();
+        }
+
         this.main_container.empty();
         this.header = null;
         this.footer = null;
