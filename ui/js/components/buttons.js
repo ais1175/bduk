@@ -70,7 +70,7 @@ $(document).off("click", ".btn").on("click", ".btn", function () {
 
     for (const attr of $btn[0].attributes) {
         if (attr.name.startsWith("data-") && !["data-modal", "data-action", "data-action_type", "data-button"].includes(attr.name)) {
-            const key = attr.name.replace("data-", "").replace(/-([a-z])/g, (_, c) => c.toUpperCase());
+            const key = attr.name.replace("data-", "").replace(/-+/g, "_");
             if (key === "should_close") {
                 should_close = attr.value === "true";
             } else {
@@ -78,7 +78,7 @@ $(document).off("click", ".btn").on("click", ".btn", function () {
             }
         }
     }
-    
+
     const modal_raw = $btn.attr("data-modal");
     if (modal_raw && !is_modal) {
         try {
@@ -102,13 +102,23 @@ $(document).off("click", ".btn").on("click", ".btn", function () {
             else val = $el.val();
 
             dataset[key] = val;
+
+            for (const attr of $el[0].attributes) {
+                if (attr.name.startsWith("data-")) {
+                    const key = attr.name.slice(5).replace(/-+/g, "_");
+                    dataset[key] = attr.value;
+                }
+            }
         });
 
         $modal.find(".modal_select").each(function () {
             const id = $(this).data("id");
-            const val = $(this).data("value") || $(this).text();
+            const val = $(this).attr("data-value");
+            const source = $(this).attr("data-source");
             if (id) dataset[id] = val;
+            if (source) dataset.source = source;
         });
+
         $("#ui_focus").removeClass("active").empty();
     }
 
