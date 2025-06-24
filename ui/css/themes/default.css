@@ -17,9 +17,9 @@ body.default {
     --border_radius_inner: 3px;
 
     /* Backgrounds */
-    --background_main: #141414;
-    --background_panel: #1f1e1e;
-    --background_hover: #323030;
+    --background_main: rgba(22, 22, 22, 0.85);
+    --background_panel: rgba(31, 30, 30, 0.85);
+    --background_hover: rgba(50, 48, 48, 0.85);
     --background_overlay: rgba(0, 0, 0, 0.5);
 
     /* Text */
