@@ -58,7 +58,7 @@ local ui_test = {
                          { 
                             id = "some_button_id", 
                             label = "Close UI", 
-                            on_click = function(data)
+                            on_action = function(data)
                                 print("Clicked a button with data:", json.encode(data or {}))
                             end,
                             should_close = true, 
@@ -67,7 +67,7 @@ local ui_test = {
                          { 
                             id = "some_button_id", 
                             label = "Button Label", 
-                            on_click = function(data)
+                            on_action = function(data)
                                 print("Clicked a button with data:", json.encode(data or {}))
                             end,
                             should_close = true, 
@@ -89,14 +89,14 @@ local ui_test = {
                         { 
                             key = "ESC", 
                             label = "Close",
-                            on_keypress = function(data)
+                            on_action = function(data)
                                 print("Pressed a key with data:", json.encode(data or {}))
                             end
                         },
                         { 
                             key = "E", 
                             label = "Confirm",
-                            on_keypress = function(data)
+                            on_action = function(data)
                                 print("Pressed a key with data:", json.encode(data or {}))
                             end
                         }
@@ -199,7 +199,6 @@ local ui_test = {
                                             buttons = {
                                                 {
                                                     label = "Close",
-                                                    action = "close_modal",
                                                     should_close = true
                                                 }
                                             }
@@ -319,7 +318,7 @@ local ui_test = {
                         { 
                             id = "some_button_id", 
                             label = "Button Label", 
-                            on_click = function(data)
+                            on_action = function(data)
                                 print("Clicked a button with data:", json.encode(data or {}))
                             end,
                             should_close = true, 
@@ -449,4 +448,77 @@ RegisterCommand("test_bduk_notify", function()
         match_border = false,
         match_shadow = true
     })
+end)
+
+RegisterCommand("test_dui", function()
+    exports.bduk:add_dui_zone({
+        id = "some_test_dui",
+        coords = vector4(-313.25, -968.42, 31.08, 143.41),
+        header = "Some Test DUI",
+        image = "/ui/assets/logos/bd_100.png",
+        show_if = function()
+            return not IsPedInAnyVehicle(PlayerPedId())
+        end,
+        keys = {
+            { 
+                key = 'E',
+                label = 'Change Clothing',
+                action_type = 'client',
+                action = 'keystone:cl:open_clothing_store'
+            }
+        },
+        additional = {
+            progressbars = {
+                some_prog_bar = { label = "Gimmie Progress?", value = 10 }
+            },
+            values = {
+                some_value = { label = "Some value", value = 10}
+            }
+        }
+    })
+end)
+
+RegisterCommand("test_dui2", function()
+    local id = "some_test_dui" -- your zone id
+    local progress = 0
+
+    -- add initial zone
+    exports.bduk:add_dui_zone({
+        id = id,
+        coords = vector4(-313.25, -968.42, 31.08, 143.41),
+        header = "Some Test DUI",
+        image = "/ui/assets/logos/bd_100.png",
+        keys = {
+            { 
+                key = 'E',
+                label = 'Do Something',
+                action_type = 'client',
+                action = 'keystone:cl:open_clothing_store'
+            }
+        },
+        additional = {
+            progressbars = {
+                some_prog_bar = { label = "Gimmie Progress?", value = progress }
+            }
+        }
+    })
+
+    --- thread to update bar
+    CreateThread(function()
+        while true do
+            Wait(1000)
+
+            progress = progress + 5
+            if progress > 100 then progress = 0 end
+
+            --- event to update dui; event so can be done from server
+            TriggerEvent("bduk:cl:sync_dui_data", id, {
+                additional = {
+                    progressbars = {
+                        some_prog_bar = { label = "Power", value = progress }
+                    }
+                }
+            })
+        end
+    end)
 end)
