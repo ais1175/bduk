@@ -1,4 +1,4 @@
-![BDUK_THUMB](https://github.com/user-attachments/assets/0882c392-7569-4a14-83aa-224c0bbd99b8)
+![BDUKTHUMBNEW](https://github.com/user-attachments/assets/6065e269-4b24-42a0-9dbd-b3e96728e803)
 
 # BDUK — BOII Development UI Kit
 
