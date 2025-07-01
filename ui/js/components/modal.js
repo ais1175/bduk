@@ -87,11 +87,7 @@ export class Modal {
             const label = $(this).text();
             const $w = $(this).closest(".modal_select_wrapper");
             const $sel = $w.find(".modal_select");
-
-            $sel.text(label)
-                .data("value", val).attr("data-value", val)
-                .data("source", source).attr("data-source", source);
-
+            $sel.text(label).data("value", val).attr("data-value", val).data("source", source).attr("data-source", source);
             $w.find(".modal_select_options").hide();
         });
 
