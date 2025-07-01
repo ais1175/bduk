@@ -40,20 +40,32 @@ export class Content {
     /** @param {string} id Page key to display */
     async show_page(id) {
         const config = this.pages[id];
-        if (!config || typeof config !== "object") return $(".content_body.center").html(`<div class="placeholder_content">No content for "${id}"</div>`);
-
-        for (const s of ["left", "center", "right"]) {
-            const span = config.layout?.[s] ?? 0, $el = $(`.content_section.${s}`);
-            const section = config[s] || null;
-            if (!span || !section) { $el.hide(); continue; }
-
-            $el.css("grid-column", `span ${span}`).show();
-            $(`.content_title.${s}`).html(`<h3>${section.title || ""}</h3>`);
-            $(`.content_body.${s}`).html(await this.render_content(section));
+        if (!config || typeof config !== "object") {
+            $(".content_body.center").html(`<div class="placeholder_content"></div>`);
+            return;
         }
-
+        for (const s of ["left", "center", "right"]) {
+            const span = config.layout?.[s] ?? this.layout[s] ?? 0;
+            const section = config[s] || null;
+            const $el = $(`.content_section.${s}`);
+            $el.css("grid-column", `span ${span || 0}`).show();
+            if (section) {
+                const html = await this.render_content(section);
+                if (html.trim()) {
+                    $(`.content_title.${s}`).html(section.title ? (typeof section.title === "object" ? `<h3>${section.title.text}${section.title.span ? ` <span>${section.title.span}</span>` : ""}</h3>` : `<h3>${section.title}</h3>`) : "");
+                    $(`.content_body.${s}`).html(html);
+                } else {
+                    $(`.content_title.${s}`).empty();
+                    $(`.content_body.${s}`).html(`<div class="placeholder_section"></div>`);
+                }
+            } else {
+                $(`.content_title.${s}`).empty();
+                $(`.content_body.${s}`).html(`<div class="placeholder_section"></div>`);
+            }
+        }
         window.bduk_instance?.tooltip?.bind_tooltips();
     }
+
 
     /** @param {string} html @param {string} [section="center"] */
     set_content(html, section = "center") { $(`.content_body.${section}`).html(html); }
@@ -67,7 +79,7 @@ export class Content {
             cards: () => this.build_cards(data),
             input_groups: () => this.build_input_groups(data)
         };
-        return map[data.type]?.() || "<p>Unknown content type.</p>";
+        return map[data.type]?.() || "";
     }
 
     /** @param {Object} data @returns {string} Cards HTML */
