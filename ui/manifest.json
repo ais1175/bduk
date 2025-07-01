@@ -17,6 +17,8 @@
         "/ui/css/components/input_groups.css",
         "/ui/css/components/namecard.css",
         "/ui/css/components/dui_sprite.css",
+        "/ui/css/components/progress_circle.css",
+        "/ui/css/components/progress_bar.css",
 
         "/ui/css/themes/default.css"
     ],
