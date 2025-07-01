@@ -59,6 +59,12 @@ $(document).off("click", ".btn").on("click", ".btn", function () {
         return;
     }
 
+    if (action === "close_modal" && is_modal) {
+        $modal.remove();
+        $("#ui_focus").removeClass("active").empty();
+        return;
+    }
+
     if (action === "close_builder" && window.bduk_instance) {
         window.bduk_instance.destroy();
         window.bduk_instance = null;
