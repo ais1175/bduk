@@ -10,6 +10,8 @@
 import { Builder } from "/ui/js/builder.js";
 import { Notify } from "/ui/js/components/notify.js";
 import { DUISprite } from "/ui/js/components/dui_sprite.js";
+import { ProgressCircle } from "/ui/js/components/progress_circle.js";
+import { ProgressBar } from "/ui/js/components/progress_bar.js";
 
 let interact_dui = null;
 
@@ -77,17 +79,47 @@ handlers.notify = (data) => {
     notify.show(data.payload);
 };
 
+/**
+ * Show dui sprite.
+ * @function handlers.show_dui
+ * @param {Object} data - Message data object.
+ * @param {Object} data.payload - DUI payload.
+ */
 handlers.show_dui = (data) => {
-        if (interact_dui) {
-            interact_dui.close();
-        }
-        interact_dui = new DUISprite(data.payload);
+    if (interact_dui) {
+        interact_dui.close();
     }
+    interact_dui = new DUISprite(data.payload);
+}
 
+/**
+ * Hides dui sprite.
+ * @function handlers.close_dui
+ */
 handlers.close_dui = () => {
     if (interact_dui) {
         interact_dui.close();
     }
+}
+
+/**
+ * Show progress circle.
+ * @function handlers.show_circle
+ * @param {Object} data - Message data object.
+ * @param {Object} data.payload - Circle payload.
+ */
+handlers.show_circle = (data) => {
+    new ProgressCircle(data.payload);
+}
+
+/**
+ * Show progress bar.
+ * @function handlers.show_circle
+ * @param {Object} data - Message data object.
+ * @param {Object} data.payload - Bar payload.
+ */
+handlers.show_progressbar = (data) => {
+    new ProgressBar(data.payload);
 }
 
 /**
