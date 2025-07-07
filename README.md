@@ -1,3 +1,12 @@
+⚠️ Some users may experience a false-positive warning from Windows Defender when downloading the GitHub-generated ZIP, seems due to heuristic file scanning.
+✅ This repository contains **only open-source code**, and is safe to use. 
+📂 To avoid warnings, consider cloning the repo instead of downloading the ZIP.
+
+![image](https://github.com/user-attachments/assets/6b066479-1af6-48c6-a229-89fd5482e48f)
+![image](https://github.com/user-attachments/assets/bb229bc6-ba0d-43b5-a5e6-6e1ff64cc7af)
+
+---
+
 ![BDUKTHUMBNEW](https://github.com/user-attachments/assets/6065e269-4b24-42a0-9dbd-b3e96728e803)
 
 # BDUK — BOII Development UI Kit
